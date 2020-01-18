@@ -13,7 +13,7 @@ import utils.nns as nns
 class WGANGP:
     def __init__(self, train_ds=None, epochs=10000, LAMBDA=10, BATCH_SIZE=8, checkpoint_dir='', TRAINING_RATIO=8,
                  save_interval=50, output_dir='output/', restore_check=False, apply_fourier=True, nbins=10, log_interval=20,
-                 spectral_norm=True, new_nets=True, input_dim=512):
+                 spectral_norm=True, new_nets=True, input_dim=512, tipo_latente='normal'):
         assert input_dim == 128 or input_dim == 512, 'La dimensión de entrada solo puede ser 128 o 512.'
         self.input_dim = input_dim
         self.LAMBDA = LAMBDA
@@ -30,6 +30,15 @@ class WGANGP:
         self.spectral_norm = spectral_norm
         self.new_nets = new_nets
         self.height_images = 200 if self.new_nets else 256
+        self.aleatorio = self.latente(tipo_latente)
+
+        if tipo_latente == 'uniforme':
+            self.par1, self.par2 = -1, +1
+        else:
+            tipo_latente = 'normal'
+            self.par1, self.par2 = 0, 0.1
+
+        print(f'Se entrenará utilizando {input_dim} dimensiones y generando con una distribución {tipo_latente}')
 
         self.discriminator, self.generator = self.get_networks()
 
@@ -80,7 +89,8 @@ class WGANGP:
 
     def discriminator_step(self, x_real):
         with tf.GradientTape() as t:
-            z = np.random.normal(0, 1, (self.BATCH_SIZE, self.input_dim)).astype('f')
+            # z = np.random.normal(0, 1, (self.BATCH_SIZE, self.input_dim)).astype('f')
+            z = self.aleatorio(self.par1, self.par2, (self.BATCH_SIZE, self.input_dim)).astype('f')
             x_fake = self.generator(z, training=True)
 
             x_real_from_discriminator = self.discriminator(x_real, training=True)
@@ -186,7 +196,7 @@ class WGANGP:
     @tf.function
     def generator_step(self):
         with tf.GradientTape() as t:
-            z = np.random.normal(0, 1, (self.BATCH_SIZE, self.input_dim)).astype('f')
+            z = self.aleatorio(self.par1, self.par2, (self.BATCH_SIZE, self.input_dim)).astype('f')
             x_fake = self.generator(z, training=True)
             x_fake_from_discriminator = self.discriminator(x_fake, training=True)
             G_loss = self.generator_loss(x_fake_from_discriminator)
@@ -340,3 +350,10 @@ class WGANGP:
         train_summary_writer = tf.summary.create_file_writer(train_log_dir)
 
         return train_summary_writer
+
+    @staticmethod
+    def latente(tipo):
+        if tipo == 'uniforme':
+            return np.random.uniform
+        else:
+            return np.random.normal
