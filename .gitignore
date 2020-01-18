@@ -1,0 +1,8 @@
+logs/
+.ipynb_checkpoints/
+output/
+checkpoints/
+*.zip
+*.ipynb
+pruebas_red.py
+.idea
