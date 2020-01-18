@@ -12,7 +12,7 @@ BATCH_SIZE = 8
 TRAINING_RATIO = 4
 
 modelo = WGANGP(epochs=10000, BATCH_SIZE=BATCH_SIZE, checkpoint_dir='checkpoints/', log_interval=2, spectral_norm=False,
-                save_interval=50, TRAINING_RATIO=TRAINING_RATIO, tipo_latente='uniforme')
+                save_interval=50, TRAINING_RATIO=TRAINING_RATIO, tipo_latente='uniforme', apply_fourier=False)
 
 ds = np.load(datasets_path + 'muestra_seleccionada_200_sin_ceros.npy')
 
