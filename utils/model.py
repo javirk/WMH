@@ -13,7 +13,7 @@ import utils.nns as nns
 class WGANGP:
     def __init__(self, train_ds=None, epochs=10000, LAMBDA=10, BATCH_SIZE=8, checkpoint_dir='', TRAINING_RATIO=8,
                  save_interval=50, output_dir='output/', restore_check=False, apply_fourier=True, nbins=10, log_interval=20,
-                 spectral_norm=True, new_nets=True, input_dim=512, tipo_latente='normal'):
+                 spectral_norm=True, new_nets=True, input_dim=512, tipo_latente='normal', plot_grads=False, plot_weights=False):
         assert input_dim == 128 or input_dim == 512, 'La dimensión de entrada solo puede ser 128 o 512.'
         self.input_dim = input_dim
         self.LAMBDA = LAMBDA
@@ -31,6 +31,8 @@ class WGANGP:
         self.new_nets = new_nets
         self.height_images = 200 if self.new_nets else 256
         self.aleatorio = self.latente(tipo_latente)
+        self.plot_grads = plot_grads
+        self.plot_weights = plot_weights
 
         if tipo_latente == 'uniforme':
             self.par1, self.par2 = -1, +1
@@ -82,8 +84,8 @@ class WGANGP:
 
     @staticmethod
     def optimizers():
-        generator_optimizer = tf.keras.optimizers.Adam(0.0001)
-        discriminator_optimizer = tf.keras.optimizers.Adam(0.0004)
+        generator_optimizer = tf.keras.optimizers.Adam(0.001, beta_1=0, beta_2=0.99)
+        discriminator_optimizer = tf.keras.optimizers.Adam(0.001, beta_1=0, beta_2=0.99)
 
         return generator_optimizer, discriminator_optimizer
 
@@ -108,7 +110,7 @@ class WGANGP:
         D_grad = t.gradient(D_loss_total, self.discriminator.trainable_variables)
         self.discriminator_optimizer.apply_gradients(zip(D_grad, self.discriminator.trainable_variables))
 
-        return {'d_loss': D_loss_total, 'gp_loss': gp, 'fourier_loss': fl}
+        return {'d_loss': D_loss_total, 'gp_loss': gp, 'fourier_loss': fl, 'D_grad': D_grad}
 
     def fourier_loss(self, x_real, x_fake, axes=(1, 2)):
         fourier_fake = self.get_fourier_spectrum(x_fake, axes=axes)
@@ -204,7 +206,7 @@ class WGANGP:
         G_grad = t.gradient(G_loss, self.generator.trainable_variables)
         self.generator_optimizer.apply_gradients(zip(G_grad, self.generator.trainable_variables))
 
-        return {'g_loss': G_loss}
+        return {'g_loss': G_loss, 'G_grad': G_grad}
 
     def interpolate(self, x_real, x_fake):
         shape = [tf.shape(x_real)[0]] + [1] * (x_real.ndim - 1)
@@ -300,14 +302,17 @@ class WGANGP:
             tf.summary.image('T1', t1, max_outputs=n_images_to_present, step=epoch)
             tf.summary.image('Mask', mask, max_outputs=n_images_to_present, step=epoch)
 
-    def fit(self, dataset, initial_epoch=0):
+    def fit(self, dataset, initial_epoch=0, images_per_epoch=None):
         assert dataset.shape[1] == dataset.shape[2] and dataset.shape[1] == self.height_images, \
             'The size of the dataset must be batches x' + str(self.height_images) + 'x' + str(self.height_images) + 'x3'
 
         if self.apply_fourier:
             self.fourier_real = self.get_fourier_spectrum(dataset)
 
-        n_images = dataset.shape[0]
+        if images_per_epoch is None:
+            n_images = dataset.shape[0]
+        else:
+            n_images = images_per_epoch
         n_minibatches = int(n_images // (self.BATCH_SIZE * self.TRAINING_RATIO))
         training_ratio_epoch = initial_epoch * n_minibatches * self.TRAINING_RATIO
 
@@ -334,6 +339,20 @@ class WGANGP:
                     tf.summary.scalar('Discriminator loss', disc_loss['d_loss'], step=training_ratio_epoch)
                     tf.summary.scalar('Gradient Penalty loss', disc_loss['gp_loss'], step=training_ratio_epoch)
                     tf.summary.scalar('Fourier loss', disc_loss['fourier_loss'],  step=training_ratio_epoch)
+                    if self.plot_grads:
+                        for grad in gen_loss['G_grad']:
+                            tf.summary.histogram('Generator gradients', grad, step=epoch + 1)
+                        for grad in disc_loss['D_grad']:
+                            tf.summary.histogram('Discriminator gradients', grad, step=training_ratio_epoch)
+
+                    if self.plot_weights:
+                        with tf.name_scope('Generator weights'):
+                            for weight in self.generator.weights:
+                                tf.summary.histogram(weight.name, weight, step=epoch + 1)
+                        with tf.name_scope('Discriminator weights'):
+                            for weight in self.discriminator.weights:
+                                tf.summary.histogram(weight.name, weight, step=training_ratio_epoch)
+
 
             if (epoch + 1) % self.save_interval == 0:
                 # self.checkpoint.save(file_prefix=self.checkpoint_prefix)

@@ -75,31 +75,31 @@ def Discriminator_original():
 def Discriminator_prog():
     model = Sequential()
     model.add(Convolution2D(16, 1, padding='same', input_shape=(200, 200, 3), activation=LeakyReLU()))
-    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(512, 4, padding='same', strides=[4, 4], activation=LeakyReLU()))
+    model.add(Convolution2D(512, 4, padding='same', strides=[4, 4], activation=LeakyReLU(0.2)))
 
     model.add(Dense(1, kernel_initializer='he_normal'))
 
@@ -175,34 +175,34 @@ def Generator_prog():
 
     model.add(Dense(4 * 4 * 128, input_dim=128))
     model.add(Reshape((4, 4, 128), input_shape=(4 * 4 * 128,)))
-    model.add(Convolution2D(128, 4, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(128, 4, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU()))  # 64x64x64
+    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(64, 3, padding='same', activation=LeakyReLU(0.2)))  # 64x64x64
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU()))  # 32x128x128
+    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU(0.2)))  # 32x128x128
 
     model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
-    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU(0.2)))
 
-    model.add(Convolution2D(3, 1, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(3, 1, padding='same', activation=LeakyReLU(0.2)))
 
     return model
 
@@ -211,34 +211,34 @@ def Generator_prog_512():
 
     model.add(Dense(4 * 4 * 512, input_dim=512))
     model.add(Reshape((4, 4, 512), input_shape=(4 * 4 * 512,)))
-    model.add(Convolution2D(512, 4, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(512, 4, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', activation=LeakyReLU(0.2)))
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU()))  # 256x64x64
+    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(256, 3, padding='same', activation=LeakyReLU(0.2)))  # 256x64x64
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU()))  # 128x128x128
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', activation=LeakyReLU(0.2)))  # 128x128x128
 
     model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
-    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU()))
-    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU()))   # 16x256x256
+    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU(0.2)))   # 16x256x256
 
-    model.add(Convolution2D(3, 1, padding='same', activation=LeakyReLU()))
+    model.add(Convolution2D(3, 1, padding='same', activation=LeakyReLU(0.2)))
 
     return model
 
