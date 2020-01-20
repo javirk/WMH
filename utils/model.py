@@ -320,23 +320,28 @@ class WGANGP:
             start = time()
             np.random.shuffle(dataset)
             minibatches_size = self.BATCH_SIZE * self.TRAINING_RATIO
-
+            gen_loss_epoch = []
+            disc_loss_epoch = []
             for i in range(int(n_images // (self.BATCH_SIZE * self.TRAINING_RATIO))):
                 discriminator_minibatches = dataset[i * minibatches_size: (i + 1) * minibatches_size]
 
                 for j in range(self.TRAINING_RATIO):
                     image_batch = discriminator_minibatches[j * self.BATCH_SIZE: (j + 1) * self.BATCH_SIZE]
                     disc_loss = self.discriminator_step(image_batch)
+                    disc_loss_epoch.append(disc_loss['d_loss'])
                     training_ratio_epoch += 1
 
                 gen_loss = self.generator_step()
+                gen_loss_epoch.append(gen_loss['g_loss'])
 
             print('Epoch ' + str(epoch) + ' took ' + str(time() - start))
 
             if (epoch + 1) % self.log_interval == 0:
+                gen_loss_epoch = sum(gen_loss_epoch) / len(gen_loss_epoch)
+                disc_loss_epoch = sum(disc_loss_epoch) / len(disc_loss_epoch)
                 with self.train_summary_writer.as_default():
-                    tf.summary.scalar('Generator loss', gen_loss['g_loss'], step=epoch + 1)
-                    tf.summary.scalar('Discriminator loss', disc_loss['d_loss'], step=training_ratio_epoch)
+                    tf.summary.scalar('Generator loss', gen_loss_epoch, step=epoch + 1)
+                    tf.summary.scalar('Discriminator loss', disc_loss_epoch, step=training_ratio_epoch)
                     tf.summary.scalar('Gradient Penalty loss', disc_loss['gp_loss'], step=training_ratio_epoch)
                     tf.summary.scalar('Fourier loss', disc_loss['fourier_loss'],  step=training_ratio_epoch)
                     if self.plot_grads:
