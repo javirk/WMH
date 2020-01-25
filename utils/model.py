@@ -340,6 +340,8 @@ class WGANGP:
                 gen_loss_epoch = sum(gen_loss_epoch) / len(gen_loss_epoch)
                 disc_loss_epoch = sum(disc_loss_epoch) / len(disc_loss_epoch)
                 with self.train_summary_writer.as_default():
+                    print('Generator: ' + str(gen_loss_epoch))
+                    print('Discriminator: ' + str(disc_loss_epoch))
                     tf.summary.scalar('Generator loss', gen_loss_epoch, step=epoch + 1)
                     tf.summary.scalar('Discriminator loss', disc_loss_epoch, step=training_ratio_epoch)
                     tf.summary.scalar('Gradient Penalty loss', disc_loss['gp_loss'], step=training_ratio_epoch)
