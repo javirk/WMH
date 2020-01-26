@@ -49,73 +49,73 @@ def Discriminator_original():
     model.add(Convolution2D(32, 5, padding='same', strides=[2, 2], input_shape=(256, 256, 3)))
     model.add(LeakyReLU())
 
-    model.add(Convolution2D(64, 5, kernel_initializer='he_normal', strides=[2, 2], padding='same'))
+    model.add(Convolution2D(64, 5, kernel_initializer='random_normal', strides=[2, 2], padding='same'))
     model.add(LeakyReLU())
 
-    model.add(Convolution2D(128, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2]))
+    model.add(Convolution2D(128, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2]))
     model.add(LeakyReLU())
 
-    model.add(Convolution2D(256, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2]))
+    model.add(Convolution2D(256, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2]))
     model.add(LeakyReLU())
 
-    model.add(Convolution2D(512, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2]))
+    model.add(Convolution2D(512, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2]))
     model.add(LeakyReLU())
 
-    model.add(Convolution2D(1024, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2]))
+    model.add(Convolution2D(1024, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2]))
     model.add(LeakyReLU())
 
     model.add(Flatten())
-    # model.add(Dense(1024 * 4 * 4, kernel_initializer='he_normal'))
+    # model.add(Dense(1024 * 4 * 4, kernel_initializer='random_normal'))
     # model.add(LeakyReLU())
-    model.add(Dense(1, kernel_initializer='he_normal'))
+    model.add(Dense(1, kernel_initializer='random_normal'))
 
     return model
 
 
 def Discriminator_prog():
     model = Sequential()
-    model.add(Convolution2D(16, 1, padding='same', kernel_initializer='he_normal', input_shape=(200, 200, 3), activation=LeakyReLU()))
+    model.add(Convolution2D(16, 1, padding='same', kernel_initializer='random_normal', input_shape=(200, 200, 3), activation=LeakyReLU()))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(16, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(16, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(32, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
-
-    model.add(Convolution2D(32, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(Convolution2D(64, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(32, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(64, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(32, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
-
-    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(64, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(64, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
-
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
     model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
 
-    model.add(Convolution2D(512, 4, padding='same', strides=[4, 4], kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
+
+    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
+
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(AveragePooling2D(pool_size=(2, 2), padding='same'))
+
+    model.add(Convolution2D(512, 4, padding='same', strides=[4, 4], kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
 
-    model.add(Dense(1, kernel_initializer='he_normal'))
+    model.add(Dense(1, kernel_initializer='random_normal'))
 
     return model
 
@@ -242,48 +242,48 @@ def Generator_prog_512():
 
     model.add(Dense(4 * 4 * 512, input_dim=512))
     model.add(Reshape((4, 4, 512), input_shape=(4 * 4 * 512,)))
-    model.add(Convolution2D(512, 4, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 4, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-
-    model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-
-    model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
-    model.add(pixel_wise_normalization())
-    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))  # 256x64x64
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
 
     model.add(UpSampling2D(size=(2, 2)))
-    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))  # 128x128x128
+    model.add(Convolution2D(512, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+
+    model.add(UpSampling2D(size=(2, 2)))
+    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(Convolution2D(256, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))  # 256x64x64
+    model.add(pixel_wise_normalization())
+
+    model.add(UpSampling2D(size=(2, 2)))
+    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
+    model.add(pixel_wise_normalization())
+    model.add(Convolution2D(128, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))  # 128x128x128
     model.add(pixel_wise_normalization())
 
     model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
-    model.add(Convolution2D(16, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(16, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
-    model.add(Convolution2D(16, 3, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))   # 16x256x256
+    model.add(Convolution2D(16, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))   # 16x256x256
     model.add(pixel_wise_normalization())
 
-    model.add(Convolution2D(3, 1, padding='same', kernel_initializer='he_normal', activation=LeakyReLU(0.2)))
+    model.add(Convolution2D(3, 1, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
 
     return model
@@ -294,23 +294,23 @@ def Discriminator_SN():
     model.add(SpectralNorm(Convolution2D(32, 5, padding='same', strides=[2, 2], input_shape=(256, 256, 3))))
     model.add(LeakyReLU())
 
-    model.add(SpectralNorm(Convolution2D(64, 5, kernel_initializer='he_normal', strides=[2, 2], padding='same')))
+    model.add(SpectralNorm(Convolution2D(64, 5, kernel_initializer='random_normal', strides=[2, 2], padding='same')))
     model.add(LeakyReLU())
 
-    model.add(SpectralNorm(Convolution2D(128, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2])))
+    model.add(SpectralNorm(Convolution2D(128, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2])))
     model.add(LeakyReLU())
 
-    model.add(SpectralNorm(Convolution2D(256, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2])))
+    model.add(SpectralNorm(Convolution2D(256, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2])))
     model.add(LeakyReLU())
 
-    model.add(SpectralNorm(Convolution2D(512, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2])))
+    model.add(SpectralNorm(Convolution2D(512, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2])))
     model.add(LeakyReLU())
 
-    model.add(SpectralNorm(Convolution2D(1024, 5, kernel_initializer='he_normal', padding='same', strides=[2, 2])))
+    model.add(SpectralNorm(Convolution2D(1024, 5, kernel_initializer='random_normal', padding='same', strides=[2, 2])))
     model.add(LeakyReLU())
 
     model.add(Flatten())
-    model.add(Dense(1, kernel_initializer='he_normal'))
+    model.add(Dense(1, kernel_initializer='random_normal'))
 
     return model
 

@@ -13,7 +13,8 @@ import utils.nns as nns
 class WGANGP:
     def __init__(self, train_ds=None, epochs=10000, LAMBDA=10, BATCH_SIZE=8, checkpoint_dir='', TRAINING_RATIO=8,
                  save_interval=50, output_dir='output/', restore_check=False, apply_fourier=True, nbins=10, log_interval=20,
-                 spectral_norm=True, new_nets=True, input_dim=512, tipo_latente='normal', plot_grads=False, plot_weights=False):
+                 spectral_norm=True, new_nets=True, input_dim=512, tipo_latente='normal', plot_grads=False, plot_weights=False,
+                 apply_drift=True):
         assert input_dim == 128 or input_dim == 512, 'La dimensión de entrada solo puede ser 128 o 512.'
         self.input_dim = input_dim
         self.LAMBDA = LAMBDA
@@ -33,6 +34,8 @@ class WGANGP:
         self.aleatorio = self.latente(tipo_latente)
         self.plot_grads = plot_grads
         self.plot_weights = plot_weights
+        self.apply_drift = apply_drift
+        self.epsilon_drift = 0.001
 
         if tipo_latente == 'uniforme':
             self.par1, self.par2 = -1, +1
@@ -51,8 +54,7 @@ class WGANGP:
         self.train_summary_writer = self.writers_tensorboard()
 
         if restore_check:
-            print(
-                'The model will be trained for ' + str(self.epochs) + ' epochs and will restore last saved checkpoint')
+            print('The model will be trained for ' + str(self.epochs) + ' epochs and will restore last saved checkpoint')
             try:
                 self.checkpoint.restore(self.manager.latest_checkpoint)
                 print('Checkpoint restored from ' + self.manager.latest_checkpoint)
@@ -104,8 +106,12 @@ class WGANGP:
                 fl = self.fourier_loss(x_real, x_fake)
             else:
                 fl = 0
+            if self.apply_drift:
+                drift_loss = self.epsilon_drift * D_loss_real ** 2
+            else:
+                drift_loss = 0
 
-            D_loss_total = D_loss_fake + D_loss_real + gp * self.LAMBDA + self.LAMBDA * fl
+            D_loss_total = D_loss_fake + D_loss_real + gp * self.LAMBDA + self.LAMBDA * fl + drift_loss
 
         D_grad = t.gradient(D_loss_total, self.discriminator.trainable_variables)
         self.discriminator_optimizer.apply_gradients(zip(D_grad, self.discriminator.trainable_variables))
