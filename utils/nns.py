@@ -227,7 +227,8 @@ def Generator_prog(use_pixel_norm=True):
     model.add(Convolution2D(32, 3, padding='same', activation=LeakyReLU(0.2))) # 32x128x128
     model.add(pixel_wise_normalization())
 
-    model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
+    # model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
+    model.add(UpSampling2D(size=(2, 2)))
     model.add(Convolution2D(16, 3, padding='same', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
     model.add(Convolution2D( 16, 3, padding='same', activation=LeakyReLU(0.2)))
@@ -277,7 +278,8 @@ def Generator_prog_512():
     model.add(Convolution2D(128, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))  # 128x128x128
     model.add(pixel_wise_normalization())
 
-    model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
+    # model.add(UpSamplingFloat(size=(200 / 128, 200 / 128)))
+    model.add(UpSampling2D(size=(2, 2)))
     model.add(Convolution2D(16, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))
     model.add(pixel_wise_normalization())
     model.add(Convolution2D(16, 3, padding='same', kernel_initializer='random_normal', activation=LeakyReLU(0.2)))   # 16x256x256

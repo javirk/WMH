@@ -4,8 +4,6 @@ import tensorflow as tf
 from time import time
 import os
 import matplotlib.pyplot as plt
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Convolution2D, LeakyReLU, Flatten, Dense, Conv2DTranspose, Reshape
 from datetime import datetime
 import utils.nns as nns
 
@@ -30,7 +28,8 @@ class WGANGP:
         self.fourier_real = None
         self.spectral_norm = spectral_norm
         self.new_nets = new_nets
-        self.height_images = 200 if self.new_nets else 256
+        # self.height_images = 200 if self.new_nets else 256
+        self.height_images = 256
         self.aleatorio = self.latente(tipo_latente)
         self.plot_grads = plot_grads
         self.plot_weights = plot_weights
@@ -86,8 +85,8 @@ class WGANGP:
 
     @staticmethod
     def optimizers():
-        generator_optimizer = tf.keras.optimizers.Adam(0.001, beta_1=0, beta_2=0.99)
-        discriminator_optimizer = tf.keras.optimizers.Adam(0.001, beta_1=0, beta_2=0.99)
+        generator_optimizer = tf.keras.optimizers.Adam(0.0005, beta_1=0, beta_2=0.99)
+        discriminator_optimizer = tf.keras.optimizers.Adam(0.0005, beta_1=0, beta_2=0.99)
 
         return generator_optimizer, discriminator_optimizer
 
@@ -107,7 +106,7 @@ class WGANGP:
             else:
                 fl = 0
             if self.apply_drift:
-                drift_loss = self.epsilon_drift * D_loss_real ** 2
+                drift_loss = self.epsilon_drift * (D_loss_real ** 2)
             else:
                 drift_loss = 0
 
