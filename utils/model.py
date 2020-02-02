@@ -85,8 +85,8 @@ class WGANGP:
 
     @staticmethod
     def optimizers():
-        generator_optimizer = tf.keras.optimizers.Adam(0.0005, beta_1=0, beta_2=0.99)
-        discriminator_optimizer = tf.keras.optimizers.Adam(0.0005, beta_1=0, beta_2=0.99)
+        generator_optimizer = tf.keras.optimizers.Adam(0.001, beta_1=0.9, beta_2=0.999)
+        discriminator_optimizer = tf.keras.optimizers.Adam(0.001, beta_1=0.9, beta_2=0.999)
 
         return generator_optimizer, discriminator_optimizer
 

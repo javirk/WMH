@@ -11,10 +11,11 @@ datasets_path = '../00. Datasets/'
 BATCH_SIZE = 6
 TRAINING_RATIO = 2
 IMAGES_PER_EPOCH = 200
+LAMBDA = 0
 
-modelo = WGANGP(epochs=10000, BATCH_SIZE=BATCH_SIZE, checkpoint_dir='checkpoints/', log_interval=2, spectral_norm=False,
+modelo = WGANGP(epochs=10000, BATCH_SIZE=BATCH_SIZE, LAMBDA=LAMBDA, checkpoint_dir='checkpoints/', log_interval=2, spectral_norm=False,
                 save_interval=50, TRAINING_RATIO=TRAINING_RATIO, tipo_latente='uniforme', apply_fourier=False, plot_weights=True)
 
-ds = np.load(datasets_path + 'total_three_datasets_sorted_256.npy')
+ds = np.load(datasets_path + 'muestra_seleccionada_256_sin_ceros.npy')
 
-modelo.fit(dataset=ds, images_per_epoch=IMAGES_PER_EPOCH)
+modelo.fit(dataset=ds)
