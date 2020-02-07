@@ -70,6 +70,7 @@ class WGANGP:
         elif self.new_nets:
             disc = nns.Discriminator_prog()
         else:
+            self.input_dim = 128
             disc = nns.Discriminator_original()
 
         # Generator

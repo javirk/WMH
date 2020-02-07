@@ -9,13 +9,13 @@ session = InteractiveSession(config=config)
 
 datasets_path = '../00. Datasets/'
 BATCH_SIZE = 6
-TRAINING_RATIO = 2
+TRAINING_RATIO = 8
 IMAGES_PER_EPOCH = 200
-LAMBDA = 0
+LAMBDA = 10
 
 modelo = WGANGP(epochs=10000, BATCH_SIZE=BATCH_SIZE, LAMBDA=LAMBDA, checkpoint_dir='checkpoints/', log_interval=2, spectral_norm=False,
-                save_interval=50, TRAINING_RATIO=TRAINING_RATIO, tipo_latente='uniforme', apply_fourier=False, plot_weights=True)
+                save_interval=50, TRAINING_RATIO=TRAINING_RATIO, tipo_latente='uniforme', apply_fourier=False, plot_weights=True, new_nets=False)
 
-ds = np.load(datasets_path + 'muestra_seleccionada_256_sin_ceros.npy')
+ds = np.load(datasets_path + 'borrado-renormalizado.npy')
 
-modelo.fit(dataset=ds)
+modelo.fit(dataset=ds, images_per_epoch=IMAGES_PER_EPOCH)
